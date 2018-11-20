@@ -34,14 +34,11 @@ module Gemstash
     end
 
     module S3
-      %w(AWS_S3_ACCOUNT_ID AWS_S3_SECRET_ACCESS_KEY AWS_S3_REGION AWS_S3_BUCKET).each do |env_var|
+      %w(AWS_S3_BUCKET).each do |env_var|
         raise("#{env_var} environment variable not set.") if ENV[env_var].nil?
       end
 
-      @s3 = Aws::S3::Resource.new(
-        credentials: Aws::Credentials.new(ENV['AWS_S3_ACCOUNT_ID'], ENV['AWS_S3_SECRET_ACCESS_KEY']),
-        region: ENV['AWS_S3_REGION']
-      )
+      @s3 = Aws::S3::Resource.new
 
       def upload_to_s3(filename)
         obj = @s3.bucket(ENV['AWS_S3_BUCKET']).object(filename)
